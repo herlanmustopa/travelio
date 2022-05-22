@@ -26,20 +26,16 @@ class App extends Component {
   };
 
   getItems() {
-    let url = `https://randomuser.me/api/?page=${this.state.page + 1}&results=${
-      this.state.rowsPerPage
-    }&seed=abc`;
+    let url = `https://www.googleapis.com/books/v1/volumes?q=%7Bkeyword`;
     // let url = `https://randomuser.me/api/?results=20`;
     // let url = "https://jsonplaceholder.typicode.com/users";
     console.log("DATA NI" + url);
     fetch(url)
       .then((res) => res.json())
       .then((items) => {
-        console.log(items.results, "items");
+        console.log(items.items, "items");
         this.setState({
-          items: items.results,
-          totalRows: items.info.results,
-          // getGender: "",
+          items: items.items,
         });
       })
       .catch((err) => console.log(err));
@@ -48,22 +44,6 @@ class App extends Component {
     // this.state.getGender = "";
     this.setState({ getSearch: "" });
   };
-  getItemsGender(value) {
-    // let url = `https://randomuser.me/api/?results=20&inc=gender${this.state.getGender}`;
-    let url = `https://randomuser.me/api/?gender=${value}`;
-
-    console.log("DATA NI" + url);
-    fetch(url)
-      .then((res) => res.json())
-      .then((items) => {
-        console.log(items.results, "items");
-        this.setState({
-          items: items.results,
-          totalRows: items.info.results,
-        });
-      })
-      .catch((err) => console.log(err));
-  }
 
   componentDidMount() {
     this.getItems();
@@ -80,7 +60,6 @@ class App extends Component {
   };
 
   render() {
-    const listgender = ["female", "male"];
     return (
       <>
         <Stack direction="row">
@@ -99,24 +78,6 @@ class App extends Component {
               }}
             />
           </div>
-          {/* 
-          <div>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={listgender}
-
-              onSelect={(event, value) =>
-                this.setState({ getSearch: event.target.value })
-              }
-              size="small"
-              sx={{ width: 300, mx: 2 }}
-              renderInput={(params) => <TextField {...params} label="Gender" />}
-            />
-          </div>
-          <div>
-            <button onClick={this.resetFilter}>Reset Filter</button>
-          </div> */}
         </Stack>
         <div>
           <Container className="App">
@@ -127,40 +88,24 @@ class App extends Component {
                     <TableCell align="center">USERNAME</TableCell>
                     <TableCell align="center">NAME</TableCell>
                     <TableCell align="center">EMAIL</TableCell>
-                    <TableCell align="center">GENDER</TableCell>
-                    <TableCell align="center">REGISTERED DATE</TableCell>
+                    {/* <TableCell align="center">GENDER</TableCell>
+                    <TableCell align="center">REGISTERED DATE</TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {this.state.items
-                    .slice(
-                      this.state.page * this.state.rowsPerPage,
-                      this.state.page * this.state.rowsPerPage +
-                        this.state.rowsPerPage
-                    )
                     .filter((item) => {
                       return (
-                        item.name.first
+                        item.volumeInfo.title
                           .toLowerCase()
                           .includes(this.state.getSearch.toLowerCase()) ||
-                        item.name.last
+                        item.volumeInfo.authors
                           .toLowerCase()
-                          .includes(this.state.getSearch.toLowerCase()) ||
-                        item.email
-                          .toLowerCase()
-                          .includes(this.state.getSearch.toLowerCase()) ||
-                        item.gender
-                          .valueOf()
-                          .includes(this.state.getSearch.valueOf())
-                        // item.gender
-                        //   .valueOf()
-                        //   .includes(this.state.getSearch.valueOf())
-                        //    ||
-                        // item.gender
-                        //   .toUpperCase()
-                        //   .includes(this.state.getGender.toUpperCase())
+                          .includes(this.state.getSearch.toLowerCase())
                       );
-                    })
+                    }
+                    
+                    )
 
                     .map((column, index) => {
                       return (
@@ -178,7 +123,7 @@ class App extends Component {
                                   textAlign: "center",
                                 }}
                               >
-                                {column.login.username}
+                                {column.volumeInfo.title}
                               </TableCell>
                               <TableCell
                                 key={column.id}
@@ -190,7 +135,7 @@ class App extends Component {
                                   textAlign: "center",
                                 }}
                               >
-                                {column.name.first} {column.name.last}
+                                {column.volumeInfo.authors}
                               </TableCell>
                               <TableCell
                                 key={column.id}
@@ -202,9 +147,9 @@ class App extends Component {
                                   textAlign: "center",
                                 }}
                               >
-                                {column.email}
+                                {column.volumeInfo.ratingsCount}
                               </TableCell>
-                              <TableCell
+                              {/* <TableCell
                                 key={column.id}
                                 style={{
                                   height: "50px",
@@ -227,7 +172,7 @@ class App extends Component {
                                 }}
                               >
                                 {column.registered.date}
-                              </TableCell>
+                              </TableCell> */}
                             </TableRow>
                           ) : (
                             <div>{column.error}</div>

@@ -2,18 +2,13 @@
 
 project testing online recrutiment in Travelio
 
-<img  src="/public/travelio.png" width="100" height="100" alt="travelio"/>
+<!-- <img  src="/public/travelio.png" width="100" height="100" alt="travelio"/> -->
 
 ## Used By
 
 This project is used by the following companies:
 
 - Travelio
-
-## 🚀 About Team
-
-We a full stack developer... | HaHaHaHa I ❤️ myJob
-
 ## Authors
 
 - [@herlanmustopa](https://www.github.com/herlanmustopa)
