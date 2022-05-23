@@ -6,14 +6,18 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { TableFooter, TextField, Autocomplete, Stack } from "@mui/material";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import TablePagination from " @material-ui/core/TablePagination";
-// import PaginationItem from "@mui/material/PaginationItem";
-// import { DataGrid } from "@mui/x-data-grid";
+import { TextField, Button, Stack, Box } from "@mui/material";
+import StarRatings from "react-star-ratings";
+import { styled } from "@mui/material/styles";
 
+const ProductImgStyle = styled("img")({
+  top: 0,
+  width: "70px",
+  height: "70px",
+  objectFit: "cover",
+  position: "absolute",
+});
 class App extends Component {
   state = {
     items: [],
@@ -27,8 +31,7 @@ class App extends Component {
 
   getItems() {
     let url = `https://www.googleapis.com/books/v1/volumes?q=%7Bkeyword`;
-    // let url = `https://randomuser.me/api/?results=20`;
-    // let url = "https://jsonplaceholder.typicode.com/users";
+
     console.log("DATA NI" + url);
     fetch(url)
       .then((res) => res.json())
@@ -65,7 +68,7 @@ class App extends Component {
         <Stack direction="row">
           <div>
             {this.state.getNames}
-            <TextField
+            {/* <TextField
               id="outlined-basic"
               label="Search"
               variant="outlined"
@@ -76,20 +79,19 @@ class App extends Component {
                 this.setState({ getSearch: event.target.value });
                 // this.getItemsNames();
               }}
-            />
+            /> */}
           </div>
         </Stack>
         <div>
           <Container className="App">
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">USERNAME</TableCell>
-                    <TableCell align="center">NAME</TableCell>
-                    <TableCell align="center">EMAIL</TableCell>
-                    {/* <TableCell align="center">GENDER</TableCell>
-                    <TableCell align="center">REGISTERED DATE</TableCell> */}
+                    <TableCell align="center">Title Book</TableCell>
+                    <TableCell align="center">Author</TableCell>
+                    <TableCell align="center">Thumbnail</TableCell>
+                    <TableCell align="center">Rating</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -103,9 +105,7 @@ class App extends Component {
                           .toLowerCase()
                           .includes(this.state.getSearch.toLowerCase())
                       );
-                    }
-                    
-                    )
+                    })
 
                     .map((column, index) => {
                       return (
@@ -147,19 +147,23 @@ class App extends Component {
                                   textAlign: "center",
                                 }}
                               >
-                                {column.volumeInfo.ratingsCount}
-                              </TableCell>
-                              {/* <TableCell
-                                key={column.id}
-                                style={{
-                                  height: "50px",
-                                  width: "150px",
-                                  alignItems: "center",
-                                  justifyItems: "center",
-                                  textAlign: "center",
-                                }}
-                              >
-                                {column.gender}
+                                <Box
+                                  sx={{
+                                    alignItems: "center",
+                                    justifyItems: "center",
+                                    textAlign: "center",
+                                    pt: "30%",
+                                    position: "relative",
+                                  }}
+                                >
+                                  <ProductImgStyle
+                                    // alt={data.channel_name}
+                                    src={
+                                      column.volumeInfo.imageLinks
+                                        .smallThumbnail
+                                    }
+                                  />
+                                </Box>
                               </TableCell>
                               <TableCell
                                 key={column.id}
@@ -171,8 +175,13 @@ class App extends Component {
                                   textAlign: "center",
                                 }}
                               >
-                                {column.registered.date}
-                              </TableCell> */}
+                                <StarRatings
+                                  rating={column.volumeInfo.averageRating}
+                                  starRatedColor="gold"
+                                  starDimension="20px"
+                                  starSpacing="5px"
+                                />
+                              </TableCell>
                             </TableRow>
                           ) : (
                             <div>{column.error}</div>
@@ -183,25 +192,6 @@ class App extends Component {
                 </TableBody>
               </Table>
             </TableContainer>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={3}
-                  count={this.state.items.length}
-                  rowsPerPage={this.state.rowsPerPage}
-                  page={this.state.page}
-                  SelectProps={{
-                    inputProps: {
-                      "aria-label": "rows per page",
-                    },
-                    native: true,
-                  }}
-                  onPageChange={this.handleChangePage}
-                  onRowsPerPageChange={this.handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
           </Container>
         </div>
       </>
